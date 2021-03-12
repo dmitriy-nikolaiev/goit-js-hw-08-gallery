@@ -4,28 +4,19 @@ const galleryListRef = document.querySelector('ul.js-gallery');
 const lightboxRef = document.querySelector('div.js-lightbox');
 const lightboxImageRef = document.querySelector('img.lightbox__image');
 
-// Gallery render
-const renderGallery = () => {
-  const htmlGalleryItems = galleryItems.map(
-    ({ preview, original, description: alt }) => {
-      return `<li class="gallery__item">
-      <a class="gallery__link" href="${original}">
-        <img class="gallery__image" src="${preview}"
-        data-source="${original}"
-        alt="${alt}"/>
-      </a>
-    </li>`;
-    },
-  );
-  galleryListRef.insertAdjacentHTML('afterbegin', htmlGalleryItems.join(''));
-};
-
-// Modal control
-const openModal = imageRef => {
-  lightboxImageRef.setAttribute('src', imageRef.dataset.source);
-  lightboxImageRef.setAttribute('alt', imageRef.alt);
-  lightboxRef.classList.add('is-open');
-};
+// Create gallery
+const htmlGalleryItems = galleryItems.map(
+  ({ preview, original, description: alt }) => {
+    return `<li class="gallery__item">
+    <a class="gallery__link" href="${original}">
+      <img class="gallery__image" src="${preview}"
+      data-source="${original}"
+      alt="${alt}"/>
+    </a>
+  </li>`;
+  },
+);
+galleryListRef.insertAdjacentHTML('afterbegin', htmlGalleryItems.join(''));
 
 const closeModal = () => {
   lightboxRef.classList.remove('is-open');
@@ -52,7 +43,9 @@ const scrollImage = direction => {
 galleryListRef.addEventListener('click', event => {
   event.preventDefault();
   if (event.target.classList.contains('gallery__image')) {
-    openModal(event.target);
+    lightboxImageRef.setAttribute('src', event.target.dataset.source);
+    lightboxImageRef.setAttribute('alt', event.target.alt);
+    lightboxRef.classList.add('is-open');
   }
 });
 
@@ -77,5 +70,3 @@ document.addEventListener('keydown', ({ code }) => {
     scrollImage(-1);
   }
 });
-
-renderGallery();
